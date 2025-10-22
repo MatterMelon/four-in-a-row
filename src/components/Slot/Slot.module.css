@@ -1,0 +1,48 @@
+.slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 8vw;
+  height: 8vw;
+  background: rgb(88, 74, 214);
+  mask: radial-gradient(circle 50px at center,
+  transparent 94%,
+  rgba(0,0,0,0.8) 97%,
+  black 100%);
+  -webkit-mask: radial-gradient(circle 3vw at center, transparent 97%, black 100%);
+  z-index: 1;
+}
+
+.hovered {
+  mask: radial-gradient(circle 50px at center,
+  rgba(0,0,0,0.3) 94%,
+  rgba(0,0,0,0.8) 97%,
+  rgb(0, 0, 0) 100%);
+}
+
+.p1 {
+  mask: none;
+}
+
+.p1::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 70%;
+  background: red;
+  border-radius: 50%;
+}
+
+.p2 {
+ mask: none;
+}
+
+.p2::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 70%;
+  background: rgb(25, 0, 255);
+  border-radius: 50%;
+}

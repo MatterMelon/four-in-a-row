@@ -23,7 +23,7 @@ export default function Board({ rows, cols }: BoardProps) {
   const moveMarker = useCallback(
     (columnNumber: number) => {
       if (markerRef.current && columnPositions[columnNumber] !== undefined) {
-        markerRef.current.style.transform = `translateX(${-columnPositions[columnNumber]}px)`;
+        markerRef.current.style.transform = `translateX(${columnPositions[columnNumber]}px)`;
       }
     },
     [columnPositions]

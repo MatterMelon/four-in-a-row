@@ -8,10 +8,21 @@ type ColumnProps = {
   columnState: SlotState[];
   handleClick: (columnNumber: number) => void;
   handleHover: (columnNumber: number) => void;
+  handleMouseOut: () => void;
 };
 
 const Column = forwardRef<HTMLDivElement, ColumnProps>(
-  ({ columnNumber, slotsCount, columnState, handleClick, handleHover }: ColumnProps, ref) => {
+  (
+    {
+      columnNumber,
+      slotsCount,
+      columnState,
+      handleClick,
+      handleHover,
+      handleMouseOut,
+    }: ColumnProps,
+    ref
+  ) => {
     const [isSelected, setIsSelected] = useState(false);
 
     const handleSelect = () => {
@@ -21,6 +32,7 @@ const Column = forwardRef<HTMLDivElement, ColumnProps>(
 
     const handleDeselect = () => {
       setIsSelected(false);
+      handleMouseOut();
     };
 
     return (

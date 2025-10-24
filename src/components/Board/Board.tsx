@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
@@ -13,12 +13,21 @@ export default function Board({ rows, cols }: BoardProps) {
   const [boardState, setBoardState] = useState<SlotState[][]>(
     new Array(cols).fill(initColumnState)
   );
-  // const [activeColumn, setActiveColumn] = useState<number | null>(null);
+  const [activeColumn, setActiveColumn] = useState<number | null>(null);
   const [columnPositions, setColumnPositions] = useState<number[]>([]);
 
   const boardRef = useRef<HTMLDivElement>(null);
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
+
+  const moveMarker = useCallback(
+    (columnNumber: number) => {
+      if (markerRef.current && columnPositions[columnNumber] !== undefined) {
+        markerRef.current.style.transform = `translateX(${-columnPositions[columnNumber]}px)`;
+      }
+    },
+    [columnPositions]
+  );
 
   // Инициализация refs для колонок
   useEffect(() => {
@@ -58,15 +67,18 @@ export default function Board({ rows, cols }: BoardProps) {
     };
   }, []);
 
-  const moveMarker = (columnNumber: number) => {
-    if (markerRef.current && columnPositions[columnNumber] !== undefined) {
-      markerRef.current.style.transform = `translateX(${-columnPositions[columnNumber]}px)`;
-    }
+  useEffect(() => {
+    moveMarker(Math.ceil(cols / 2 - 1));
+  }, [moveMarker, cols]);
+
+  const handleColumnHover = (columnNumber: number) => {
+    setActiveColumn(columnNumber);
+    moveMarker(columnNumber);
   };
 
-  moveMarker(0);
-
-  const handleColumnHover = (columnNumber: number) => moveMarker(columnNumber);
+  const handleColumnMouseOut = () => {
+    setActiveColumn(null);
+  };
 
   const handleColumnClick = (columnNumber: number) => {
     console.log(`Colunmn ${columnNumber + 1} has been clicked!`);
@@ -83,7 +95,8 @@ export default function Board({ rows, cols }: BoardProps) {
 
   return (
     <>
-      <Marker ref={markerRef} />
+      <Marker ref={markerRef} isVisible={activeColumn != null} />
+
       <div ref={boardRef} className={styles.board}>
         {Array.from({ length: cols }).map((_, i) => (
           <Column
@@ -96,6 +109,7 @@ export default function Board({ rows, cols }: BoardProps) {
             slotsCount={rows}
             handleClick={handleColumnClick}
             handleHover={handleColumnHover}
+            handleMouseOut={handleColumnMouseOut}
           />
         ))}
       </div>

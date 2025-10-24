@@ -1,7 +1,8 @@
 .marker {
-    width: 100px;
+    width: 4vw;
     aspect-ratio: 1;
     background: linear-gradient(135deg, #ff8a00, #e52e71);
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
     rotate: 180deg;
+    transition: all 0.2s ease-in-out;
 }

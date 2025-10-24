@@ -1,4 +1,8 @@
+import { forwardRef } from 'react';
 import styles from './Marker.module.css';
-export default function Marker() {
-  return <div className={styles.marker}></div>;
-}
+
+const Marker = forwardRef<HTMLDivElement>((props, ref) => {
+  return <div ref={ref} className={styles.marker}></div>;
+});
+
+export default Marker;

@@ -95,7 +95,7 @@ export default function Board({ rows, cols }: BoardProps) {
 
   return (
     <>
-      <Marker ref={markerRef} isVisible={activeColumn != null} />
+      <Marker ref={markerRef} isVisible={activeColumn !== null} />
 
       <div ref={boardRef} className={styles.board}>
         {Array.from({ length: cols }).map((_, i) => (

@@ -10,7 +10,7 @@ type BoardProps = {
 };
 
 export default function Board({ rows, cols }: BoardProps) {
-  const [boardState, setBoardState] = useState<SlotState[][]>(
+  const [boardState, setBoardState] = useState<SlotState[][]>(() =>
     new Array(cols).fill(initColumnState)
   );
   const [activeColumn, setActiveColumn] = useState<number | null>(null);

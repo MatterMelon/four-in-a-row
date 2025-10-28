@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useOnResize from '../../hooks/basic/useOnResize';
 import { useMoveMarker } from '../../hooks/useMoveMarker';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
@@ -30,36 +31,31 @@ export default function Board({ rows, cols }: BoardProps) {
     console.log(`Column refs: ${columnRefs.current}`);
   }, [cols]);
 
-  // Вычисление позиций при изменении размера окна
-  useEffect(() => {
-    const calculatePositions = () => {
-      console.log('RECALCULATING');
+  const calculatePositions = useCallback(() => {
+    console.log('RECALCULATING');
 
-      if (!boardRef.current || columnRefs.current.length === 0) {
-        console.error(boardRef.current, columnRefs.current.length);
-        return;
-      }
+    if (!boardRef.current || columnRefs.current.length === 0) {
+      console.error(boardRef.current, columnRefs.current.length);
+      return;
+    }
 
-      const boardRect = boardRef.current.getBoundingClientRect();
-      const markerRect = markerRef.current?.getBoundingClientRect();
-      const positions = columnRefs.current.map((column) => {
-        if (!column || !markerRect) return 0;
-        const columnRect = column.getBoundingClientRect();
+    const boardRect = boardRef.current.getBoundingClientRect();
+    const markerRect = markerRef.current?.getBoundingClientRect();
+    const positions = columnRefs.current.map((column) => {
+      if (!column || !markerRect) return 0;
+      const columnRect = column.getBoundingClientRect();
 
-        return columnRect.left - boardRect.left + columnRect.width / 2 - markerRect.width / 2;
-      });
+      return columnRect.left - boardRect.left + columnRect.width / 2 - markerRect.width / 2;
+    });
 
-      setColumnPositions(positions);
-    };
-
-    calculatePositions();
-
-    window.addEventListener('resize', calculatePositions);
-
-    return () => {
-      window.removeEventListener('resize', calculatePositions);
-    };
+    setColumnPositions(positions);
   }, []);
+
+  useEffect(() => {
+    calculatePositions();
+  }, [calculatePositions]);
+
+  useOnResize(calculatePositions);
 
   useEffect(() => {
     moveMarker(Math.ceil(cols / 2 - 1));

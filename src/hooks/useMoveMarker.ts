@@ -1,5 +1,5 @@
 import { useCallback, type RefObject } from 'react';
-import { useMoveElement } from './useMoveElement';
+import { useMoveElement } from './basic/useMoveElement';
 
 export const useMoveMarker = <T extends HTMLElement>(
   markerRef: RefObject<T | null>,

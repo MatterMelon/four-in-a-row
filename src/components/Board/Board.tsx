@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useMoveMarker } from '../../hooks/useMoveMarker';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
@@ -20,14 +21,7 @@ export default function Board({ rows, cols }: BoardProps) {
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
-  const moveMarker = useCallback(
-    (columnNumber: number) => {
-      if (markerRef.current && columnPositions[columnNumber] !== undefined) {
-        markerRef.current.style.transform = `translateX(${columnPositions[columnNumber]}px)`;
-      }
-    },
-    [columnPositions]
-  );
+  const { moveMarker } = useMoveMarker(markerRef, columnPositions);
 
   // Инициализация refs для колонок
   useEffect(() => {

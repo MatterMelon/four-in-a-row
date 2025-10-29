@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useOnResize from '../../hooks/basic/useOnResize';
 import { useBoardState } from '../../hooks/useBoardState';
+import { useColumnNavigation } from '../../hooks/useColumnNavigation';
 import { useMoveMarker } from '../../hooks/useMoveMarker';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
@@ -14,7 +15,6 @@ type BoardProps = {
 export default function Board({ rows, cols }: BoardProps) {
   const { boardState } = useBoardState(rows, cols);
 
-  const [activeColumn, setActiveColumn] = useState<number | null>(null);
   const [columnPositions, setColumnPositions] = useState<number[]>([]);
 
   const boardRef = useRef<HTMLDivElement>(null);
@@ -22,6 +22,8 @@ export default function Board({ rows, cols }: BoardProps) {
   const markerRef = useRef<HTMLDivElement>(null);
 
   const { moveMarker } = useMoveMarker(markerRef, columnPositions);
+  const { activeColumn, handleColumnHover, handleColumnMouseOut, centerMarker } =
+    useColumnNavigation(cols, moveMarker);
 
   useEffect(() => {
     columnRefs.current = columnRefs.current.slice(0, cols);
@@ -51,18 +53,7 @@ export default function Board({ rows, cols }: BoardProps) {
     calculatePositions();
   }, [calculatePositions]);
 
-  useEffect(() => {
-    moveMarker(Math.ceil(cols / 2 - 1));
-  }, [moveMarker, cols]);
-
-  const handleColumnHover = (columnNumber: number) => {
-    setActiveColumn(columnNumber);
-    moveMarker(columnNumber);
-  };
-
-  const handleColumnMouseOut = () => {
-    setActiveColumn(null);
-  };
+  useEffect(() => centerMarker, [centerMarker]);
 
   const handleColumnClick = (columnNumber: number) => {
     console.log(`Colunmn ${columnNumber + 1} has been clicked!`);

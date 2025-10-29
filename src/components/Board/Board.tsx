@@ -1,4 +1,4 @@
-import { useBoard } from '../../hooks/useBoard';
+import { useBoard } from '../../hooks/board/useBoard';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';

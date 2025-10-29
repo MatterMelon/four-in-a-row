@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SlotState } from '../types/slotState';
+import { SlotState } from '../../types/slotState';
 
 export function useBoardState(rows: number, cols: number) {
   const [boardState, setBoardState] = useState<SlotState[][]>(() =>

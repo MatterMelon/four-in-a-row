@@ -1,17 +1,18 @@
+import classNames from 'classnames';
+import { SlotState } from '../../types/slotState';
 import styles from './Slot.module.css';
 
 type SlotProps = {
   state: SlotState;
-  handleSelect: () => void;
-  handleDeSelect: () => void;
+  handleSelect: VoidFunction;
+  handleDeSelect: VoidFunction;
 };
 
-export default function Slot({ state = 0, handleSelect, handleDeSelect }: SlotProps) {
-  return (
-    <div
-      className={`${styles.slot} ${state === 1 ? styles.p1 : ''} ${state === 2 ? styles.p2 : ''}`}
-      onMouseEnter={handleSelect}
-      onMouseLeave={handleDeSelect}
-    ></div>
-  );
+export default function Slot({ state = SlotState.EMPTY, handleSelect, handleDeSelect }: SlotProps) {
+  const className = classNames(styles.slot, {
+    [styles.p1]: state === SlotState.PLAYER_ONE,
+    [styles.p2]: state === SlotState.PLAYER_TWO,
+  });
+
+  return <div className={className} onMouseEnter={handleSelect} onMouseLeave={handleDeSelect} />;
 }

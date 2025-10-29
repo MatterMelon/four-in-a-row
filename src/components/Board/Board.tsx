@@ -1,20 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useOnResize from '../../hooks/basic/useOnResize';
+import { useBoardState } from '../../hooks/useBoardState';
 import { useMoveMarker } from '../../hooks/useMoveMarker';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
 
-const initColumnState: SlotState[] = [0, 0, 0, 0, 0, 0];
 type BoardProps = {
   rows: number;
   cols: number;
 };
 
 export default function Board({ rows, cols }: BoardProps) {
-  const [boardState, setBoardState] = useState<SlotState[][]>(() =>
-    new Array(cols).fill(initColumnState)
-  );
+  const { boardState } = useBoardState(rows, cols);
+
   const [activeColumn, setActiveColumn] = useState<number | null>(null);
   const [columnPositions, setColumnPositions] = useState<number[]>([]);
 
@@ -24,16 +23,11 @@ export default function Board({ rows, cols }: BoardProps) {
 
   const { moveMarker } = useMoveMarker(markerRef, columnPositions);
 
-  // Инициализация refs для колонок
   useEffect(() => {
-    console.log('Init column refs...');
     columnRefs.current = columnRefs.current.slice(0, cols);
-    console.log(`Column refs: ${columnRefs.current}`);
   }, [cols]);
 
   const calculatePositions = useCallback(() => {
-    console.log('RECALCULATING');
-
     if (!boardRef.current || columnRefs.current.length === 0) {
       console.error(boardRef.current, columnRefs.current.length);
       return;
@@ -51,11 +45,11 @@ export default function Board({ rows, cols }: BoardProps) {
     setColumnPositions(positions);
   }, []);
 
+  useOnResize(calculatePositions);
+
   useEffect(() => {
     calculatePositions();
   }, [calculatePositions]);
-
-  useOnResize(calculatePositions);
 
   useEffect(() => {
     moveMarker(Math.ceil(cols / 2 - 1));
@@ -72,15 +66,6 @@ export default function Board({ rows, cols }: BoardProps) {
 
   const handleColumnClick = (columnNumber: number) => {
     console.log(`Colunmn ${columnNumber + 1} has been clicked!`);
-
-    setBoardState((prevState) => {
-      return prevState.map((col, index) => {
-        if (index === columnNumber) {
-          return new Array(rows).fill(0);
-        }
-        return col;
-      });
-    });
   };
 
   return (

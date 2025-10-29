@@ -1,5 +1,5 @@
 import { useCallback, useState, type RefObject } from 'react';
-import useOnResize from './basic/useOnResize';
+import useOnResize from './shared/useOnResize';
 
 export default function useColumnPostions<T extends HTMLElement>(
   boardRef: RefObject<T | null>,

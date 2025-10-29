@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const useOnResize = (callback: () => void) => {
+const useOnResize = (callback: VoidFunction) => {
   const callbackRef = useRef(callback);
 
   useEffect(() => {

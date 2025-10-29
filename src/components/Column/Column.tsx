@@ -1,14 +1,15 @@
 import { forwardRef, useState } from 'react';
+import type { SlotState } from '../../types/slotState';
 import Slot from '../Slot/Slot';
 import styles from './Column.module.css';
 
 type ColumnProps = {
   columnNumber: number;
   slotsCount: number;
-  columnState: SlotState[];
+  columnSlotsState: SlotState[];
   handleClick: (columnNumber: number) => void;
   handleHover: (columnNumber: number) => void;
-  handleMouseOut: () => void;
+  handleMouseOut: VoidFunction;
 };
 
 const Column = forwardRef<HTMLDivElement, ColumnProps>(
@@ -16,7 +17,7 @@ const Column = forwardRef<HTMLDivElement, ColumnProps>(
     {
       columnNumber,
       slotsCount,
-      columnState,
+      columnSlotsState: columnState,
       handleClick,
       handleHover,
       handleMouseOut,

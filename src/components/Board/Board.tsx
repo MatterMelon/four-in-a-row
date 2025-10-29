@@ -30,7 +30,7 @@ export default function Board({ rows, cols }: BoardProps) {
             ref={(el) => {
               columnRefs.current[i] = el;
             }}
-            columnState={boardState[i]}
+            columnSlotsState={boardState[i]}
             key={i}
             columnNumber={i}
             slotsCount={rows}

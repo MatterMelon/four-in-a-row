@@ -1,7 +1,7 @@
-export type SlotState = 'EMPTY' | 'PLAYER_ONE' | 'PLAYER_TWO';
-
 export const SlotState = {
-  EMPTY: 'EMPTY',
-  PLAYER_ONE: 'PLAYER_ONE',
-  PLAYER_TWO: 'PLAYER_TWO',
+  EMPTY: 0,
+  PLAYER_ONE: 1,
+  PLAYER_TWO: 2,
 } as const;
+
+export type SlotState = (typeof SlotState)[keyof typeof SlotState];

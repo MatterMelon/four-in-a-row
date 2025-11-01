@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useGameLogic } from '../game/useGameLogic';
 import { useBoardState } from './useBoardState';
 import { useColumnNavigation } from './useColumnNavigation';
 import useColumnPostions from './useColumnPositions';
@@ -9,7 +10,8 @@ export function useBoard(rows: number, cols: number) {
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
-  const { boardState } = useBoardState(rows, cols);
+  const { boardState, updateColumn } = useBoardState(rows, cols);
+  const { handlePlayerMove } = useGameLogic(boardState, updateColumn);
 
   const { columnPositions, calculatePositions, updateColumnRefs } = useColumnPostions(
     boardRef,
@@ -28,6 +30,7 @@ export function useBoard(rows: number, cols: number) {
 
   const handleColumnClick = (columnNumber: number) => {
     console.log(`Colunmn ${columnNumber + 1} has been clicked!`);
+    handlePlayerMove(columnNumber);
   };
 
   return {

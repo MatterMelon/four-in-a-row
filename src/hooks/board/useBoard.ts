@@ -11,7 +11,7 @@ export function useBoard(rows: number, cols: number) {
   const markerRef = useRef<HTMLDivElement>(null);
 
   const { boardState, updateColumn } = useBoardState(rows, cols);
-  const { handlePlayerMove } = useGameLogic(boardState, updateColumn);
+  const { activePlayer, handlePlayerMove } = useGameLogic(boardState, updateColumn);
 
   const { columnPositions, calculatePositions, updateColumnRefs } = useColumnPostions(
     boardRef,
@@ -34,6 +34,8 @@ export function useBoard(rows: number, cols: number) {
   };
 
   return {
+    activePlayer,
+
     boardRef,
     columnRefs,
     markerRef,

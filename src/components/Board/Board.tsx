@@ -10,6 +10,7 @@ type BoardProps = {
 
 export default function Board({ rows, cols }: BoardProps) {
   const {
+    activePlayer,
     boardRef,
     columnRefs,
     markerRef,
@@ -22,6 +23,7 @@ export default function Board({ rows, cols }: BoardProps) {
 
   return (
     <>
+      <p>Ходит: Игрок {activePlayer}</p>
       <Marker ref={markerRef} isVisible={activeColumn !== null} />
 
       <div ref={boardRef} className={styles.board}>

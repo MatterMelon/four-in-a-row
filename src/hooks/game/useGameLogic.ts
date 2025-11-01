@@ -35,5 +35,5 @@ export function useGameLogic(
     [checkWinCondition, makeMove, switchPlayer]
   );
 
-  return { handlePlayerMove };
+  return { activePlayer, handlePlayerMove };
 }

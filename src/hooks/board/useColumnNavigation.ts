@@ -2,8 +2,6 @@ import { useCallback } from 'react';
 import boardStore from '../../stores/board.store';
 
 export function useColumnNavigation(moveMarkerFunc: (column: number) => void) {
-  const { cols } = boardStore.boardSize;
-
   const handleColumnHover = useCallback(
     (columnNumber: number) => {
       boardStore.activeColumn = columnNumber;
@@ -17,8 +15,8 @@ export function useColumnNavigation(moveMarkerFunc: (column: number) => void) {
   }, []);
 
   const centerMarker = useCallback(() => {
-    moveMarkerFunc(Math.ceil(cols / 2 - 1));
-  }, [cols, moveMarkerFunc]);
+    moveMarkerFunc(Math.ceil(boardStore.cols / 2 - 1));
+  }, [moveMarkerFunc]);
 
   return {
     handleColumnHover,

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
+import boardStore from '../../stores/board.store';
 import { useGameLogic } from '../game/useGameLogic';
-import { useBoardState } from './useBoardState';
 import { useColumnNavigation } from './useColumnNavigation';
 import useColumnPostions from './useColumnPositions';
 import { useMoveMarker } from './useMoveMarker';
@@ -10,26 +10,27 @@ export function useBoard(rows: number, cols: number) {
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
-  const { boardState, updateColumn } = useBoardState(rows, cols);
-  const { activePlayer, handlePlayerMove } = useGameLogic(boardState, updateColumn);
+  useEffect(() => {
+    boardStore.initBoard(rows, cols);
+  }, [cols, rows]);
 
-  const { columnPositions, calculatePositions, updateColumnRefs } = useColumnPostions(
+  const { activePlayer, handlePlayerMove } = useGameLogic();
+  const { calculatePositions, updateColumnRefs } = useColumnPostions(
     boardRef,
     columnRefs,
-    markerRef,
-    cols
+    markerRef
   );
 
-  const { moveMarker } = useMoveMarker(markerRef, columnPositions);
-  const { activeColumn, handleColumnHover, handleColumnMouseOut, centerMarker } =
-    useColumnNavigation(cols, moveMarker);
+  const { moveMarker } = useMoveMarker(markerRef);
+  const { handleColumnHover, handleColumnMouseOut, centerMarker } = useColumnNavigation(moveMarker);
 
   useEffect(() => updateColumnRefs(), [cols, updateColumnRefs]);
-  useEffect(() => calculatePositions(), [calculatePositions]);
-  useEffect(() => centerMarker, [centerMarker]);
+  useEffect(() => {
+    setTimeout(() => calculatePositions(), 0);
+  }, [calculatePositions]);
+  useEffect(() => centerMarker(), [centerMarker]);
 
   const handleColumnClick = (columnNumber: number) => {
-    console.log(`Colunmn ${columnNumber + 1} has been clicked!`);
     handlePlayerMove(columnNumber);
   };
 
@@ -39,9 +40,6 @@ export function useBoard(rows: number, cols: number) {
     boardRef,
     columnRefs,
     markerRef,
-
-    boardState,
-    activeColumn,
 
     handleColumnHover,
     handleColumnMouseOut,

@@ -1,15 +1,14 @@
 import { useCallback, useState } from 'react';
-import { SlotState } from '../../types/slotState';
+import boardStore from '../../stores/board.store';
 import { useGameMoves } from './useGameMoves';
 import { useWinCheck } from './useWinCheck';
 
-export function useGameLogic(
-  boardState: SlotState[][],
-  updateColumn: (col: number, state: SlotState[]) => void
-) {
+export function useGameLogic() {
+  const { boardState, updateColumn } = boardStore;
+
   const [activePlayer, setActivePlayer] = useState(1);
   const { makeMove } = useGameMoves(boardState, activePlayer, updateColumn);
-  const { checkWinCondition } = useWinCheck(boardState);
+  const { checkWinCondition } = useWinCheck();
 
   const switchPlayer = useCallback(() => {
     if (activePlayer === 1) {

@@ -1,13 +1,13 @@
-import { useCallback, useState, type RefObject } from 'react';
+import { useCallback, type RefObject } from 'react';
+import boardStore from '../../stores/board.store';
 import useOnResize from '../shared/useOnResize';
 
 export default function useColumnPostions<T extends HTMLElement>(
   boardRef: RefObject<T | null>,
   columnRefs: RefObject<(T | null)[]>,
-  markerRef: RefObject<T | null>,
-  cols: number
+  markerRef: RefObject<T | null>
 ) {
-  const [columnPositions, setColumnPositions] = useState<number[]>([]);
+  const { cols } = boardStore.boardSize;
 
   const calculatePositions = useCallback(() => {
     if (!boardRef.current || columnRefs.current.length === 0) {
@@ -25,7 +25,7 @@ export default function useColumnPostions<T extends HTMLElement>(
       return columnRect.left - boardRect.left + columnRect.width / 2 - markerRect.width / 2;
     });
 
-    setColumnPositions(positions);
+    boardStore.columnPositions = positions;
   }, [boardRef, columnRefs, markerRef]);
 
   useOnResize(calculatePositions);
@@ -35,7 +35,6 @@ export default function useColumnPostions<T extends HTMLElement>(
   }, [cols, columnRefs]);
 
   return {
-    columnPositions,
     calculatePositions,
     updateColumnRefs,
   };

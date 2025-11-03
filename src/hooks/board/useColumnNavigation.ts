@@ -1,18 +1,19 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import boardStore from '../../stores/board.store';
 
-export function useColumnNavigation(cols: number, moveMarkerFunc: (column: number) => void) {
-  const [activeColumn, setActiveColumn] = useState<number | null>(null);
+export function useColumnNavigation(moveMarkerFunc: (column: number) => void) {
+  const { cols } = boardStore.boardSize;
 
   const handleColumnHover = useCallback(
     (columnNumber: number) => {
-      setActiveColumn(columnNumber);
+      boardStore.activeColumn = columnNumber;
       moveMarkerFunc(columnNumber);
     },
     [moveMarkerFunc]
   );
 
   const handleColumnMouseOut = useCallback(() => {
-    setActiveColumn(null);
+    boardStore.activeColumn = null;
   }, []);
 
   const centerMarker = useCallback(() => {
@@ -20,7 +21,6 @@ export function useColumnNavigation(cols: number, moveMarkerFunc: (column: numbe
   }, [cols, moveMarkerFunc]);
 
   return {
-    activeColumn,
     handleColumnHover,
     handleColumnMouseOut,
     centerMarker,

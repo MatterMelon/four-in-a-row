@@ -10,33 +10,30 @@ export function useBoard(rows: number, cols: number) {
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    boardStore.initBoard(rows, cols);
-  }, [cols, rows]);
-
-  const { activePlayer, handlePlayerMove } = useGameLogic();
+  const { handlePlayerMove } = useGameLogic();
+  const { moveMarker } = useMoveMarker(markerRef);
+  const { handleColumnHover, handleColumnMouseOut, centerMarker } = useColumnNavigation(moveMarker);
   const { calculatePositions, updateColumnRefs } = useColumnPostions(
     boardRef,
     columnRefs,
     markerRef
   );
 
-  const { moveMarker } = useMoveMarker(markerRef);
-  const { handleColumnHover, handleColumnMouseOut, centerMarker } = useColumnNavigation(moveMarker);
+  useEffect(() => {
+    boardStore.initBoard(rows, cols);
+  }, [cols, rows]);
 
   useEffect(() => updateColumnRefs(), [cols, updateColumnRefs]);
+  useEffect(() => centerMarker(), [centerMarker]);
   useEffect(() => {
     setTimeout(() => calculatePositions(), 0);
   }, [calculatePositions]);
-  useEffect(() => centerMarker(), [centerMarker]);
 
   const handleColumnClick = (columnNumber: number) => {
     handlePlayerMove(columnNumber);
   };
 
   return {
-    activePlayer,
-
     boardRef,
     columnRefs,
     markerRef,

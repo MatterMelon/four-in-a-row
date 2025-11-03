@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useBoard } from '../../hooks/board/useBoard';
 import boardStore from '../../stores/board.store';
+import gameStore from '../../stores/game.store';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
@@ -12,7 +13,6 @@ type BoardProps = {
 
 const Board = observer(({ rows, cols }: BoardProps) => {
   const {
-    activePlayer,
     boardRef,
     columnRefs,
     markerRef,
@@ -23,7 +23,8 @@ const Board = observer(({ rows, cols }: BoardProps) => {
 
   return (
     <>
-      <p>Ходит: Игрок {activePlayer}</p>
+      <p>Ходит: Игрок {gameStore.activePlayer}</p>
+      {gameStore.winner ? <h1>Победил игрок {gameStore.winner}</h1> : ''}
       <Marker ref={markerRef} isVisible={boardStore.activeColumn !== null} />
 
       {boardStore.boardState[0] ? (

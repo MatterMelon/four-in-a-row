@@ -36,6 +36,14 @@ class BoardStore {
     this._activeColumn = columnNumber;
   }
 
+  get cols() {
+    return this._cols;
+  }
+
+  get rows() {
+    return this._rows;
+  }
+
   get boardSize() {
     return { rows: this._rows, cols: this._cols };
   }

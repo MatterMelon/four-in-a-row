@@ -1,8 +1,14 @@
+import { Outlet } from 'react-router';
 import './App.css';
-import Board from './components/Board/Board';
 
 function App() {
-  return <Board rows={6} cols={7} />;
+  return (
+    <div className="App">
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  );
 }
 
 export default App;

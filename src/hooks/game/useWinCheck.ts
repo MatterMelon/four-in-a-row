@@ -2,11 +2,8 @@ import { useCallback } from 'react';
 import boardStore from '../../stores/board.store';
 import type { SlotState } from '../../types/slotState';
 
-// export function useWinCheck(boardState: SlotState[][]) {
 export function useWinCheck() {
   const { rows, cols } = boardStore.boardSize;
-  // const cols = boardState.length;
-  // const rows = boardState[0].length;
 
   const checkVertical = useCallback(
     (boardState: SlotState[][]) => {

@@ -1,22 +1,20 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import boardStore from '../../stores/board.store';
+import gameStore from '../../stores/game.store';
 import { useGameMoves } from './useGameMoves';
 import { useWinCheck } from './useWinCheck';
 
 export function useGameLogic() {
-  const { boardState, updateColumn } = boardStore;
-
-  const [activePlayer, setActivePlayer] = useState(1);
-  const { makeMove } = useGameMoves(boardState, activePlayer, updateColumn);
+  const { makeMove } = useGameMoves();
   const { checkWinCondition } = useWinCheck();
 
   const switchPlayer = useCallback(() => {
-    if (activePlayer === 1) {
-      setActivePlayer(2);
+    if (gameStore.activePlayer === 1) {
+      gameStore.activePlayer = 2;
     } else {
-      setActivePlayer(1);
+      gameStore.activePlayer = 1;
     }
-  }, [activePlayer]);
+  }, []);
 
   const handlePlayerMove = useCallback(
     (columnNumber: number) => {
@@ -26,6 +24,10 @@ export function useGameLogic() {
       const winner = checkWinCondition(newBoardState);
       if (winner) {
         console.log(`Побелил игрок ${winner}`);
+        gameStore.winner = winner;
+        setTimeout(() => {
+          gameStore.startNewGame(boardStore.rows, boardStore.cols);
+        }, 1000);
         return;
       }
 
@@ -34,5 +36,5 @@ export function useGameLogic() {
     [checkWinCondition, makeMove, switchPlayer]
   );
 
-  return { activePlayer, handlePlayerMove };
+  return { handlePlayerMove };
 }

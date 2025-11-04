@@ -3,36 +3,38 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 8vw;
-  height: 8vw;
+  width: clamp(40px, 6vw, 80px);
+  height: clamp(40px, 6vw, 80px);
   background: rgb(88, 74, 214);
-  mask: radial-gradient(circle 50px at center,
-  transparent 94%,
-  rgba(0,0,0,0.8) 97%,
-  black 100%);
-  -webkit-mask: radial-gradient(circle 3vw at center, transparent 97%, black 100%);
+  mask: radial-gradient(circle 2vw at center, transparent 97%, black 100%);
+  -webkit-mask: radial-gradient(circle 2vw at center, transparent 97%, black 100%);
   z-index: 1;
+  transition: all 0.3s ease;
 }
 
-.hovered {
-  mask: radial-gradient(circle 50px at center,
-  rgba(0,0,0,0.3) 94%,
-  rgba(0,0,0,0.8) 97%,
-  rgb(0, 0, 0) 100%);
-}
-
-.p1 {
-  mask: none;
-}
-
-.p1::before {
+.slot::before {
   position: absolute;
   content: "";
   display: block;
   width: 70%;
   height: 70%;
-  background: rgb(255, 255, 255);
+  background: rgba(255, 255, 255, 0.123);
   border-radius: 50%;
+}
+
+.p1::before,
+.p2::before {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 70%;
+  background: rgb(194, 187, 224);
+  height: 70%;
+  border-radius: 50%;
+}
+
+.p1, .p2 {
+  mask: none;
 }
 
 .p1::after {
@@ -42,25 +44,9 @@
   height: 70%;
   background: rgb(197, 65, 65);
   border-radius: 50%;
-  border: 3px solid rgb(150, 19, 19);
+  border: 2px solid rgb(150, 19, 19);
   animation: animation 0.2s ease-in-out 1;
   z-index: 2;
-
-
-}
-
-.p2 {
- mask: none;
-}
-
-.p2::before {
-  position: absolute;
-  content: "";
-  display: block;
-  width: 70%;
-  height: 70%;
-  background: rgb(255, 255, 255);
-  border-radius: 50%;
 }
 
 .p2::after {
@@ -70,16 +56,34 @@
   height: 70%;
   background: rgb(111, 201, 51);
   border-radius: 50%;
-  border: 3px solid rgb(55, 110, 17);
+  border: 2px solid rgb(55, 110, 17);
   animation: animation 0.2s ease-in-out 1;
   z-index: 2;
 }
 
 @keyframes animation {
-   0% {
-    scale: 0;
-   } 
-   100% {
-    transform: scale(100%);
-   }
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .slot {
+    width: clamp(35px, 10vw, 60px);
+    height: clamp(35px, 10vw, 60px);
+    min-width: 35px;
+    min-height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slot {
+    width: clamp(30px, 12vw, 50px);
+    height: clamp(30px, 12vw, 50px);
+    min-width: 30px;
+    min-height: 30px;
+  }
 }

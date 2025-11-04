@@ -36,7 +36,7 @@ export function useGameLogic() {
         gameStore.winner = winner;
         setTimeout(() => {
           gameStore.startNewGame(boardStore.rows, boardStore.cols);
-        }, 1000);
+        }, 2000);
         return;
       }
 

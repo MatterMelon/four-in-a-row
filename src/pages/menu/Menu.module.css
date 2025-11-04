@@ -1,0 +1,15 @@
+.title {
+    margin-bottom: 5rem;
+}
+
+.start {
+    width: 20rem;
+    height: 5rem;
+    cursor: pointer;
+    background: rgb(211, 141, 61);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    transition: background 0.1s ease-in-out;
+}

@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import App from './App';
 import './index.css';
 import GamePage from './pages/GamePage';
-import MenuPage from './pages/MenuPage';
+import MenuPage from './pages/menu/MenuPage';
 
 const router = createBrowserRouter([
   {

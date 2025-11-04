@@ -1,14 +1,16 @@
 import { makeAutoObservable } from 'mobx';
 import { GameState, type Coordinate } from '../types/gameTypes';
-import boardStore from './board.store';
+import type { RootStore } from './root.store';
 
-class BoardStore {
+export default class GameStore {
+  private _rootStore: RootStore;
   private _gameState: GameState = GameState.WAITING;
   private _activePlayer: number = 1;
   private _winner: number | null = null;
   private _lastMove: Coordinate | null = null;
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this._rootStore = rootStore;
     makeAutoObservable(this);
   }
 
@@ -69,12 +71,10 @@ class BoardStore {
   }
 
   startNewGame(rows: number, cols: number) {
-    boardStore.initBoard(rows, cols);
+    this._rootStore.boardStore.initBoard(rows, cols);
     this.gameState = GameState.PENDING;
     this.winner = null;
     this.activePlayer = 1;
     this.lastMove = null;
   }
 }
-
-export default new BoardStore();

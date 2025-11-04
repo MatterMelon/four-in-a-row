@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { SlotState } from '../types/slotState';
 
-class BoardStore {
+export default class BoardStore {
   private _boardState: SlotState[][] = [];
   private _columnPositions: number[] = [];
   private _activeColumn: number | null = null;
@@ -64,5 +64,3 @@ class BoardStore {
     this.initBoard(this._rows, this._cols);
   };
 }
-
-export default new BoardStore();

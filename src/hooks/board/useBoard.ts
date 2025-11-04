@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import boardStore from '../../stores/board.store';
+import { useStore } from '../../stores/root.store';
 import validator from '../../utils/validator';
 import { useGameLogic } from '../game/useGameLogic';
 import { useColumnNavigation } from './useColumnNavigation';
@@ -11,6 +11,7 @@ export function useBoard(rows: number, cols: number) {
   const columnRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
+  const { boardStore } = useStore();
   const { handlePlayerMove } = useGameLogic();
   const { moveMarker } = useMoveMarker(markerRef);
   const { handleColumnHover, handleColumnMouseOut, centerMarker } = useColumnNavigation(moveMarker);
@@ -24,7 +25,7 @@ export function useBoard(rows: number, cols: number) {
 
   useEffect(() => {
     boardStore.initBoard(rows, cols);
-  }, [cols, rows]);
+  }, [boardStore, cols, rows]);
 
   useEffect(() => updateColumnRefs(), [cols, updateColumnRefs]);
   useEffect(() => centerMarker(), [centerMarker]);

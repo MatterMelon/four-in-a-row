@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useBoard } from '../../hooks/board/useBoard';
-import boardStore from '../../stores/board.store';
-import gameStore from '../../stores/game.store';
+import { useStore } from '../../stores/root.store';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
@@ -12,6 +11,7 @@ type BoardProps = {
 };
 
 const Board = observer(({ rows, cols }: BoardProps) => {
+  const { gameStore, boardStore } = useStore();
   const {
     boardRef,
     columnRefs,

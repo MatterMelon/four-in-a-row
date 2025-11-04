@@ -1,89 +1,39 @@
 import { useCallback } from 'react';
-import boardStore from '../../stores/board.store';
-import type { SlotState } from '../../types/slotState';
+import gameStore from '../../stores/game.store';
+import type { Board } from '../../types/gameTypes';
+import checkWin, { isBoardFull } from '../../utils/checkWin';
 
 export function useWinCheck() {
-  const { rows, cols } = boardStore.boardSize;
+  const getConvertedBoard = (board: Board) => {
+    const convertedBoard: Board = [];
 
-  const checkVertical = useCallback(
-    (boardState: SlotState[][]) => {
-      for (let col = 0; col < cols; col++) {
-        for (let row = 0; row <= rows - 4; row++) {
-          if (
-            boardState[col][row] !== 0 &&
-            boardState[col][row] === boardState[col][row + 1] &&
-            boardState[col][row] === boardState[col][row + 2] &&
-            boardState[col][row] === boardState[col][row + 3]
-          ) {
-            return boardState[col][row];
-          }
-        }
+    for (let row = 0; row < 6; row++) {
+      convertedBoard[row] = [];
+      for (let col = 0; col < 7; col++) {
+        convertedBoard[row][col] = board[col][row];
       }
-    },
-    [cols, rows]
-  );
+    }
+    return convertedBoard.reverse();
+  };
 
-  const checkHorizontal = useCallback(
-    (boardState: SlotState[][]) => {
-      for (let col = 0; col <= cols - 4; col++) {
-        for (let row = 0; row < rows; row++) {
-          if (
-            boardState[col][row] !== 0 &&
-            boardState[col][row] === boardState[col + 1][row] &&
-            boardState[col][row] === boardState[col + 2][row] &&
-            boardState[col][row] === boardState[col + 3][row]
-          ) {
-            return boardState[col][row];
-          }
-        }
-      }
-    },
-    [cols, rows]
-  );
+  const checkWinCondition = useCallback((newBoardState: Board) => {
+    if (!gameStore.lastMove) return null;
+    const convertedBoard = getConvertedBoard(newBoardState);
+    if (isBoardFull([...convertedBoard].reverse())) {
+      alert('Full');
+      return 0;
+    }
 
-  const checkDiagonal = useCallback(
-    (boardState: SlotState[][]) => {
-      for (let col = 0; col <= cols - 4; col++) {
-        for (let row = 0; row <= rows - 4; row++) {
-          if (
-            boardState[col][row] !== 0 &&
-            boardState[col][row] === boardState[col + 1][row + 1] &&
-            boardState[col][row] === boardState[col + 2][row + 2] &&
-            boardState[col][row] === boardState[col + 3][row + 3]
-          ) {
-            return boardState[col][row];
-          }
-        }
-      }
+    const [row, col] = gameStore.lastMove;
 
-      for (let col = cols - 1; col >= 3; col--) {
-        for (let row = 0; row <= rows - 4; row++) {
-          if (
-            boardState[col][row] !== 0 &&
-            boardState[col][row] === boardState[col - 1][row + 1] &&
-            boardState[col][row] === boardState[col - 2][row + 2] &&
-            boardState[col][row] === boardState[col - 3][row + 3]
-          ) {
-            return boardState[col][row];
-          }
-        }
-      }
-    },
-    [cols, rows]
-  );
+    const winningCells = checkWin(convertedBoard, row, col, gameStore.activePlayer);
 
-  const checkWinCondition = useCallback(
-    (newBoardState: SlotState[][]) => {
-      const reversedState = newBoardState.map((col) => [...col].reverse());
+    if (winningCells) {
+      return gameStore.activePlayer;
+    }
 
-      return (
-        checkVertical(reversedState) ||
-        checkHorizontal(reversedState) ||
-        checkDiagonal(reversedState)
-      );
-    },
-    [checkVertical, checkHorizontal, checkDiagonal]
-  );
+    return null;
+  }, []);
 
   return { checkWinCondition };
 }

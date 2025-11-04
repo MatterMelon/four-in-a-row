@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import boardStore from '../../stores/board.store';
+import validator from '../../utils/validator';
 import { useGameLogic } from '../game/useGameLogic';
 import { useColumnNavigation } from './useColumnNavigation';
 import useColumnPostions from './useColumnPositions';
@@ -19,6 +20,8 @@ export function useBoard(rows: number, cols: number) {
     markerRef
   );
 
+  const [steps, setSteps] = useState<number[]>([]);
+
   useEffect(() => {
     boardStore.initBoard(rows, cols);
   }, [cols, rows]);
@@ -29,8 +32,13 @@ export function useBoard(rows: number, cols: number) {
     setTimeout(() => calculatePositions(), 0);
   }, [calculatePositions]);
 
+  useEffect(() => {
+    console.log(validator(steps));
+  }, [steps]);
+
   const handleColumnClick = (columnNumber: number) => {
     handlePlayerMove(columnNumber);
+    setSteps((prev) => [...prev, columnNumber]);
   };
 
   return {

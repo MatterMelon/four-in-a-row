@@ -6,7 +6,7 @@ export type Coordinate = [number, number];
 export type BoardState = 'waiting' | 'pending' | 'win' | 'draw';
 
 export interface WinnerInfo {
-  who: Player;
+  who: string;
   positions: Coordinate[];
 }
 

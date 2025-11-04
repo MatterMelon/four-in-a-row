@@ -1,5 +1,8 @@
+.column {
+    transition: all 0.2s ease-in-out;
+}
+
 .selected {
     background: rgba(52, 6, 255, 0.11);
     cursor: pointer;
-
 }

@@ -39,7 +39,7 @@ const Column = forwardRef<HTMLDivElement, ColumnProps>(
       handleMouseOut();
     };
 
-    const className = classNames('', {
+    const className = classNames(styles.column, {
       [styles.selected]: isActive && isSelected,
     });
 

@@ -1,6 +1,14 @@
 import { makeAutoObservable } from 'mobx';
 import { SlotState } from '../types/slotState';
 
+export interface BoardStoreState {
+  boardState: SlotState[][];
+  columnPositions: number[];
+  activeColumn: number | null;
+  rows: number;
+  cols: number;
+}
+
 export default class BoardStore {
   private _boardState: SlotState[][] = [];
   private _columnPositions: number[] = [];
@@ -8,7 +16,9 @@ export default class BoardStore {
   private _rows: number = 0;
   private _cols: number = 0;
 
-  constructor() {
+  constructor(savedState?: Partial<BoardStoreState>) {
+    console.log('Board saved state:', savedState);
+    this.initializeFromSavedState(savedState);
     makeAutoObservable(this);
   }
 
@@ -63,4 +73,49 @@ export default class BoardStore {
   resetBoard = () => {
     this.initBoard(this._rows, this._cols);
   };
+
+  getPersistableData() {
+    return {
+      boardState: this._boardState,
+      columnPositions: this._columnPositions,
+      activeColumn: this._activeColumn,
+      rows: this._rows,
+      cols: this._cols,
+    };
+  }
+
+  private initializeFromSavedState(savedState?: Partial<BoardStoreState>) {
+    if (savedState && this.isValidBoardState(savedState)) {
+      console.log(savedState);
+      this._boardState = savedState.boardState ?? [];
+      this._columnPositions = savedState.columnPositions ?? [];
+      this._activeColumn = null;
+      this._rows = savedState.rows ?? 0;
+      this._cols = savedState.cols ?? 0;
+      console.log('BoardStore initialized from saved state');
+    } else {
+      this.resetBoard();
+      console.log('BoardStore initialized with default values');
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private isValidBoardState(state: any): state is Partial<BoardStoreState> {
+    if (!state) return false;
+
+    const isValid =
+      (state.boardState === undefined || Array.isArray(state.boardState)) &&
+      (state.columnPositions === undefined || Array.isArray(state.columnPositions)) &&
+      (state.activeColumn === undefined ||
+        state.activeColumn === null ||
+        typeof state.activeColumn === 'number') &&
+      (state.rows === undefined || (typeof state.rows === 'number' && state.rows >= 0)) &&
+      (state.cols === undefined || (typeof state.cols === 'number' && state.cols >= 0));
+
+    if (!isValid) {
+      console.warn('Invalid board state found in localStorage');
+    }
+
+    return isValid;
+  }
 }

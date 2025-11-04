@@ -38,7 +38,6 @@ export class RootStore {
   }
 
   private saveToStorage() {
-    console.log('SAVED TO LOCAL STORAGE!');
     saveState('rootStore', this.getPersistableData());
   }
 

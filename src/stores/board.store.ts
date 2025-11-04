@@ -17,7 +17,6 @@ export default class BoardStore {
   private _cols: number = 0;
 
   constructor(savedState?: Partial<BoardStoreState>) {
-    console.log('Board saved state:', savedState);
     this.initializeFromSavedState(savedState);
     makeAutoObservable(this);
   }
@@ -58,6 +57,10 @@ export default class BoardStore {
     return { rows: this._rows, cols: this._cols };
   }
 
+  get isInitialized(): boolean {
+    return this._rows > 0 && this._cols > 0 && this._boardState.length > 0;
+  }
+
   initBoard = (rows: number, cols: number) => {
     this._rows = rows >= 0 ? rows : 0;
     this._cols = cols >= 0 ? cols : 0;
@@ -86,7 +89,6 @@ export default class BoardStore {
 
   private initializeFromSavedState(savedState?: Partial<BoardStoreState>) {
     if (savedState && this.isValidBoardState(savedState)) {
-      console.log(savedState);
       this._boardState = savedState.boardState ?? [];
       this._columnPositions = savedState.columnPositions ?? [];
       this._activeColumn = null;

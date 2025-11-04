@@ -104,14 +104,12 @@ export default class GameStore {
 
   private initializeFromSavedState(savedState?: Partial<GameStoreState>) {
     if (savedState && this.isValidGameState(savedState)) {
-      // Восстанавливаем из сохраненных данных
       this._gameState = savedState.gameState ?? GameState.WAITING;
       this._activePlayer = savedState.activePlayer ?? 1;
       this._winner = savedState.winner ?? null;
       this._lastMove = savedState.lastMove ?? null;
       console.log('GameStore initialized from saved state');
     } else {
-      // Инициализируем значениями по умолчанию
       this.resetGame();
       console.log('GameStore initialized with default values');
     }
@@ -121,41 +119,12 @@ export default class GameStore {
   private isValidGameState(state: any): state is Partial<GameStoreState> {
     if (!state) return false;
 
-    // const isValid =
-    //   // Проверка gameState
-    //   (state.gameState === undefined ||
-    //     (typeof state.gameState === 'string' &&
-    //       Object.values(GameState).includes(state.gameState as GameState)) ||
-    //     (typeof state.gameState === 'number' &&
-    //       Object.values(GameState).includes(state.gameState as GameState))) &&
-    //   // Проверка activePlayer
-    //   (state.activePlayer === undefined || state.activePlayer === 1 || state.activePlayer === 2) &&
-    //   // Проверка winner
-    //   (state.winner === undefined ||
-    //     state.winner === null ||
-    //     state.winner === 0 ||
-    //     state.winner === 1 ||
-    //     state.winner === 2) &&
-    //   // Проверка lastMove
-    //   (state.lastMove === undefined ||
-    //     state.lastMove === null ||
-    //     (typeof state.lastMove === 'object' &&
-    //       state.lastMove !== null &&
-    //       'x' in state.lastMove &&
-    //       'y' in state.lastMove &&
-    //       typeof state.lastMove.x === 'number' &&
-    //       typeof state.lastMove.y === 'number' &&
-    //       Number.isInteger(state.lastMove.x) &&
-    //       Number.isInteger(state.lastMove.y)));
-
     const isValid =
       typeof state.gameState === 'number' &&
       Object.values(GameState).includes(state.gameState) &&
       typeof state.activePlayer === 'number' &&
       (typeof state.winner === 'number' || state.winner === null) &&
-      typeof state.lastMove === 'object' &&
-      typeof state.lastMove[0] === 'number' &&
-      typeof state.lastMove[1] === 'number';
+      typeof state.lastMove === 'object';
 
     if (!isValid) {
       console.warn('Invalid game state found in localStorage');

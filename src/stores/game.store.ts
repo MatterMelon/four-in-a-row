@@ -46,6 +46,9 @@ class BoardStore {
       case null:
         this._winner = null;
         break;
+      case 0:
+        this._winner = player;
+        break;
       case 1:
         this._winner = 1;
         break;

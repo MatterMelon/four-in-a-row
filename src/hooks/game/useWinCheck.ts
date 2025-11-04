@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import gameStore from '../../stores/game.store';
 import type { Board } from '../../types/gameTypes';
-import checkWin from '../../utils/checkWin';
+import checkWin, { isBoardFull } from '../../utils/checkWin';
 
 export function useWinCheck() {
   const getConvertedBoard = (board: Board) => {
@@ -17,8 +17,12 @@ export function useWinCheck() {
   };
 
   const checkWinCondition = useCallback((newBoardState: Board) => {
-    if (!gameStore.lastMove) return;
+    if (!gameStore.lastMove) return null;
     const convertedBoard = getConvertedBoard(newBoardState);
+    if (isBoardFull([...convertedBoard].reverse())) {
+      alert('Full');
+      return 0;
+    }
 
     const [row, col] = gameStore.lastMove;
 

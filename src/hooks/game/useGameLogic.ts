@@ -22,8 +22,12 @@ export function useGameLogic() {
       if (!newBoardState) return;
 
       const winner = checkWinCondition(newBoardState);
-      if (winner) {
-        console.log(`Побелил игрок ${winner}`);
+      if (winner !== null) {
+        if (winner !== 0) {
+          console.log(`Побелил игрок ${winner}!`);
+        } else {
+          console.log('Ничья!');
+        }
         gameStore.winner = winner;
         setTimeout(() => {
           gameStore.startNewGame(boardStore.rows, boardStore.cols);

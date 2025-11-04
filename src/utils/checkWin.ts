@@ -45,7 +45,7 @@ export default function checkWin(
 }
 
 export function isBoardFull(board: Board): boolean {
-  return board[0].every((cell) => cell !== null);
+  return board[0].every((cell) => cell !== null && cell !== 0);
 }
 
 function isValidPosition(row: number, col: number): boolean {

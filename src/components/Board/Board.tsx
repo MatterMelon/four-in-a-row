@@ -11,7 +11,7 @@ type BoardProps = {
 };
 
 const Board = observer(({ rows, cols }: BoardProps) => {
-  const { gameStore, boardStore } = useStore();
+  const { boardStore } = useStore();
   const {
     boardRef,
     columnRefs,
@@ -23,10 +23,6 @@ const Board = observer(({ rows, cols }: BoardProps) => {
 
   return (
     <>
-      <p>Ходит: Игрок {gameStore.activePlayer}</p>
-      {gameStore.winner === 0 ? <h1>Ниья!</h1> : ''}
-      {gameStore.winner ? <h1>Победил игрок {gameStore.winner}!</h1> : ''}
-
       <Marker ref={markerRef} isVisible={boardStore.activeColumn !== null} />
 
       {boardStore.boardState[0] ? (

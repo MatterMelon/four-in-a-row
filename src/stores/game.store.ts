@@ -1,14 +1,24 @@
 import { makeAutoObservable } from 'mobx';
 import { GameState, type Coordinate } from '../types/gameTypes';
-import boardStore from './board.store';
+import type { RootStore } from './root.store';
 
-class BoardStore {
+export interface GameStoreState {
+  gameState: GameState;
+  activePlayer: number;
+  winner: number | null;
+  lastMove: Coordinate | null;
+}
+
+export default class GameStore {
+  private _rootStore: RootStore;
   private _gameState: GameState = GameState.WAITING;
   private _activePlayer: number = 1;
   private _winner: number | null = null;
   private _lastMove: Coordinate | null = null;
 
-  constructor() {
+  constructor(rootStore: RootStore, savedState?: Partial<GameStoreState>) {
+    this._rootStore = rootStore;
+    this.initializeFromSavedState(savedState);
     makeAutoObservable(this);
   }
 
@@ -69,12 +79,57 @@ class BoardStore {
   }
 
   startNewGame(rows: number, cols: number) {
-    boardStore.initBoard(rows, cols);
+    this._rootStore.boardStore.initBoard(rows, cols);
     this.gameState = GameState.PENDING;
     this.winner = null;
     this.activePlayer = 1;
     this.lastMove = null;
   }
-}
 
-export default new BoardStore();
+  resetGame() {
+    this._gameState = GameState.WAITING;
+    this._activePlayer = 1;
+    this._winner = null;
+    this._lastMove = null;
+  }
+
+  getPersistableData() {
+    return {
+      gameState: this._gameState,
+      activePlayer: this._activePlayer,
+      winner: this._winner,
+      lastMove: this._lastMove,
+    };
+  }
+
+  private initializeFromSavedState(savedState?: Partial<GameStoreState>) {
+    if (savedState && this.isValidGameState(savedState)) {
+      this._gameState = savedState.gameState ?? GameState.WAITING;
+      this._activePlayer = savedState.activePlayer ?? 1;
+      this._winner = savedState.winner ?? null;
+      this._lastMove = savedState.lastMove ?? null;
+      console.log('GameStore initialized from saved state');
+    } else {
+      this.resetGame();
+      console.log('GameStore initialized with default values');
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private isValidGameState(state: any): state is Partial<GameStoreState> {
+    if (!state) return false;
+
+    const isValid =
+      typeof state.gameState === 'number' &&
+      Object.values(GameState).includes(state.gameState) &&
+      typeof state.activePlayer === 'number' &&
+      (typeof state.winner === 'number' || state.winner === null) &&
+      typeof state.lastMove === 'object';
+
+    if (!isValid) {
+      console.warn('Invalid game state found in localStorage');
+    }
+
+    return isValid;
+  }
+}

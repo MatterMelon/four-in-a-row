@@ -9,7 +9,7 @@ import MenuPage from './pages/MenuPage';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />, // App становится корневым элементом
+    element: <App />,
     children: [
       {
         index: true,

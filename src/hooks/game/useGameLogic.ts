@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import boardStore from '../../stores/board.store';
-import gameStore from '../../stores/game.store';
+import { useStore } from '../../stores/root.store';
 import { useGameMoves } from './useGameMoves';
 import { useWinCheck } from './useWinCheck';
 
 export function useGameLogic() {
+  const { gameStore, boardStore } = useStore();
   const { makeMove } = useGameMoves();
   const { checkWinCondition } = useWinCheck();
 
@@ -14,7 +14,7 @@ export function useGameLogic() {
     } else {
       gameStore.activePlayer = 1;
     }
-  }, []);
+  }, [gameStore]);
 
   const handlePlayerMove = useCallback(
     (columnNumber: number) => {
@@ -37,7 +37,7 @@ export function useGameLogic() {
 
       switchPlayer();
     },
-    [checkWinCondition, makeMove, switchPlayer]
+    [boardStore.cols, boardStore.rows, checkWinCondition, gameStore, makeMove, switchPlayer]
   );
 
   return { handlePlayerMove };

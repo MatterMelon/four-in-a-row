@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
-import gameStore from '../../stores/game.store';
+import { useStore } from '../../stores/root.store';
 import type { Board } from '../../types/gameTypes';
 import checkWin, { isBoardFull } from '../../utils/checkWin';
 
 export function useWinCheck() {
+  const { gameStore } = useStore();
   const getConvertedBoard = (board: Board) => {
     const convertedBoard: Board = [];
 
@@ -16,24 +17,27 @@ export function useWinCheck() {
     return convertedBoard.reverse();
   };
 
-  const checkWinCondition = useCallback((newBoardState: Board) => {
-    if (!gameStore.lastMove) return null;
-    const convertedBoard = getConvertedBoard(newBoardState);
-    if (isBoardFull([...convertedBoard].reverse())) {
-      alert('Full');
-      return 0;
-    }
+  const checkWinCondition = useCallback(
+    (newBoardState: Board) => {
+      if (!gameStore.lastMove) return null;
+      const convertedBoard = getConvertedBoard(newBoardState);
+      if (isBoardFull([...convertedBoard].reverse())) {
+        alert('Full');
+        return 0;
+      }
 
-    const [row, col] = gameStore.lastMove;
+      const [row, col] = gameStore.lastMove;
 
-    const winningCells = checkWin(convertedBoard, row, col, gameStore.activePlayer);
+      const winningCells = checkWin(convertedBoard, row, col, gameStore.activePlayer);
 
-    if (winningCells) {
-      return gameStore.activePlayer;
-    }
+      if (winningCells) {
+        return gameStore.activePlayer;
+      }
 
-    return null;
-  }, []);
+      return null;
+    },
+    [gameStore.activePlayer, gameStore.lastMove]
+  );
 
   return { checkWinCondition };
 }

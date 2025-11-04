@@ -1,14 +1,15 @@
 import { useCallback, type RefObject } from 'react';
-import boardStore from '../../stores/board.store';
+import { useStore } from '../../stores/root.store';
 import { useMoveElement } from '../shared/useMoveElement';
 
 export const useMoveMarker = <T extends HTMLElement>(markerRef: RefObject<T | null>) => {
+  const { boardStore } = useStore();
   const { moveElementByAxis } = useMoveElement(markerRef);
 
   const canMoveMarker = useCallback(
     (columnNumber: number) =>
       markerRef.current && boardStore.columnPositions[columnNumber] !== undefined,
-    [markerRef]
+    [boardStore.columnPositions, markerRef]
   );
 
   const moveMarker = useCallback(
@@ -17,7 +18,7 @@ export const useMoveMarker = <T extends HTMLElement>(markerRef: RefObject<T | nu
         moveElementByAxis(boardStore.columnPositions[columnNumber], 'X');
       }
     },
-    [canMoveMarker, moveElementByAxis]
+    [boardStore.columnPositions, canMoveMarker, moveElementByAxis]
   );
 
   return { moveMarker };

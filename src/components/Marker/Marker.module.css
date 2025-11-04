@@ -1,5 +1,5 @@
 .marker {
-    width: 4vw;
+    width: 3vw;
     opacity: 0; 
     transition: all 0.2s ease-in-out;
 }
@@ -22,7 +22,7 @@
 
 .marker__body {
     background-color: green;
-    width: 4vw;
+    width: 3vw;
     aspect-ratio: 1;
     background: linear-gradient(135deg, #ff8a00, #e52e71);
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);

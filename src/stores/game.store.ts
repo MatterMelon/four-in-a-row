@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { GameState } from '../types/gameState';
+import { GameState } from '../types/gameTypes';
 import boardStore from './board.store';
 
 class BoardStore {

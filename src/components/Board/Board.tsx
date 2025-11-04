@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useBoard } from '../../hooks/board/useBoard';
 import { useStore } from '../../stores/root.store';
+import { GameState } from '../../types/gameTypes';
 import Column from '../Column/Column';
 import Marker from '../Marker/Marker';
 import styles from './Board.module.css';
@@ -11,7 +12,7 @@ type BoardProps = {
 };
 
 const Board = observer(({ rows, cols }: BoardProps) => {
-  const { boardStore } = useStore();
+  const { gameStore, boardStore } = useStore();
   const {
     boardRef,
     columnRefs,
@@ -29,16 +30,17 @@ const Board = observer(({ rows, cols }: BoardProps) => {
         <div ref={boardRef} className={styles.board}>
           {Array.from({ length: cols }).map((_, i) => (
             <Column
-              ref={(el) => {
-                columnRefs.current[i] = el;
-              }}
-              columnSlotsState={boardStore.boardState[i]}
               key={i}
+              isActive={gameStore.gameState === GameState.PENDING}
               columnNumber={i}
               slotsCount={rows}
               handleClick={handleColumnClick}
               handleHover={handleColumnHover}
               handleMouseOut={handleColumnMouseOut}
+              columnSlotsState={boardStore.boardState[i]}
+              ref={(el) => {
+                columnRefs.current[i] = el;
+              }}
             />
           ))}
         </div>

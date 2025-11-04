@@ -1,5 +1,5 @@
 import type { Board, Coordinate, GameResult, Player } from '../types/gameTypes';
-import checkWin from './checkWin';
+import checkWin, { isBoardFull } from './checkWin';
 
 export default function validator(moves: number[]) {
   const rows = 6;
@@ -47,7 +47,7 @@ export default function validator(moves: number[]) {
         player_2: [...playerPositions[2]],
         board_state: 'win',
         winner: {
-          who: currentPlayer,
+          who: `player_${currentPlayer}`,
           positions: winPositions,
         },
       };
@@ -75,8 +75,4 @@ export default function validator(moves: number[]) {
   }
 
   return result;
-}
-
-function isBoardFull(board: Board): boolean {
-  return board[0].every((cell) => cell !== null);
 }

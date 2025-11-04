@@ -1,10 +1,10 @@
-import type { Board, Coordinate, Player } from '../types/gameTypes';
+import type { Board, Coordinate } from '../types/gameTypes';
 
 export default function checkWin(
   board: Board,
   row: number,
   col: number,
-  player: Player
+  player: number
 ): Coordinate[] | null {
   const directions = [
     [0, 1],
@@ -42,6 +42,10 @@ export default function checkWin(
   }
 
   return null;
+}
+
+export function isBoardFull(board: Board): boolean {
+  return board[0].every((cell) => cell !== null);
 }
 
 function isValidPosition(row: number, col: number): boolean {

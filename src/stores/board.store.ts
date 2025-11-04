@@ -51,9 +51,7 @@ class BoardStore {
   initBoard = (rows: number, cols: number) => {
     this._rows = rows >= 0 ? rows : 0;
     this._cols = cols >= 0 ? cols : 0;
-    this._boardState = Array.from({ length: cols }, () =>
-      Array.from({ length: rows }, () => SlotState.EMPTY)
-    );
+    this._boardState = Array(cols).fill(Array(rows).fill(SlotState.EMPTY));
   };
 
   updateColumn = (columnNumber: number, newColumnState: SlotState[]) => {

@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../stores/root.store';
+import { COLS, ROWS } from '../../types/gameTypes';
 import Board from '../Board/Board';
 import styles from './Game.module.css';
 
@@ -25,7 +26,7 @@ export const Game = observer(() => {
       )}
 
       <div className={styles.boardContainer}>
-        <Board rows={6} cols={7} />
+        <Board rows={ROWS} cols={COLS} />
       </div>
     </>
   );

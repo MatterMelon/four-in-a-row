@@ -28,4 +28,7 @@ export const GameState = {
   DRAW: 3,
 } as const;
 
+export const ROWS = 6;
+export const COLS = 7;
+
 export type GameState = (typeof GameState)[keyof typeof GameState];

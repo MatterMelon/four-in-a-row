@@ -6,10 +6,15 @@
     width: 20rem;
     height: 5rem;
     cursor: pointer;
-    background: rgb(211, 141, 61);
+    background: rgb(231, 160, 78);
     color: white;
     border: none;
     border-radius: 10px;
     font-size: 1.5rem;
     transition: background 0.1s ease-in-out;
+}
+
+.start:hover {
+    background: rgb(253, 186, 110);
+
 }
